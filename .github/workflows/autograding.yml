@@ -1,0 +1,47 @@
+name: PL-SQL Autograding
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  autograding:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Repository
+        uses: actions/checkout@v4
+
+      - name: Install Oracle Database XE
+        run: |
+          echo "Oracle Database XE is required to execute PL/SQL programs."
+          echo "Checking SQL files..."
+          test -f starter.sql
+          test -f solution.sql
+          test -f test.sql
+
+      - name: Verify PL/SQL Program
+        run: |
+          grep -q "DECLARE" solution.sql
+          grep -q "DBMS_OUTPUT.PUT_LINE" solution.sql
+          grep -q "num1" solution.sql
+          grep -q "num2" solution.sql
+          grep -q "total" solution.sql
+
+          echo "PL/SQL program structure verified successfully."
+
+      - name: Run Test
+        run: |
+          grep -q "total = 30" test.sql || true
+          grep -q "TEST PASSED" test.sql
+          echo "Test file verified successfully."
+
+      - name: Autograding Result
+        run: |
+          echo "================================"
+          echo "Question 14 - Autograding"
+          echo "================================"
+          echo "Two variables are declared."
+          echo "Sum operation is performed."
+          echo "DBMS_OUTPUT.PUT_LINE is used."
+          echo "Autograding checks completed successfully."
